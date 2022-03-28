@@ -18,6 +18,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         share = findViewById(R.id.share);
 
         locationRequest = LocationRequest.create();
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         locationRequest.setInterval(1000 * sETINTERVAL);
         locationRequest.setFastestInterval(1000 * fASTESTINTERVAL);
@@ -81,19 +83,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void updateGPS(){
+    private void updateGPS() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(MainActivity.this);
 
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
                     updateUI(location);
                 }
             });
-        }
-        else{
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},rEQUESTCODE);
+        } else {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, rEQUESTCODE);
         }
     }
 
